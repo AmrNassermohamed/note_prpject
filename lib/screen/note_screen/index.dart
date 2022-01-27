@@ -160,7 +160,7 @@ class ItemNote extends StatelessWidget {
       child: Column(children: [
 Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
  Expanded(child:  Txt(noteModel.text,bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
-  FontWeight.w800,color: AppColor.black,)),
+  FontWeight.normal,color: AppColor.grey,)),
   IconButton(onPressed: (){
 
 AppNavigator.navigateTo(context, EditNoteScreen(noteModel: noteModel,add: false,));

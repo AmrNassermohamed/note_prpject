@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_prpject/constants/colors.dart';
 import 'package:note_prpject/shared/global_components/app_bar.dart';
+import 'package:note_prpject/shared/global_components/custom_button.dart';
+import 'package:note_prpject/shared/global_components/custom_text_filed.dart';
 
 import 'package:note_prpject/shared/global_components/text_global.dart';
 
@@ -13,6 +15,10 @@ class AddUserScreen extends StatefulWidget {
 
 class AddUserScreenState extends State<AddUserScreen> {
   @override
+
+  final TextEditingController controllerName = TextEditingController();
+  final TextEditingController controllerPassword = TextEditingController();
+  final TextEditingController controllerEmail = TextEditingController();
   Widget build(BuildContext context) {
     // TODO: implement build
     return  SafeArea(
@@ -36,11 +42,10 @@ class AddUserScreenState extends State<AddUserScreen> {
                   ),
                   Txt("Edit Note",bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
                   FontWeight.w800,color: AppColor.black,),
-
-           //       CustomTextForm(label: "UserName", formControlName:"",maxLines: 1,),
-             //     CustomTextForm(label: "Password", formControlName:"",maxLines: 1,),
-               //   CustomTextForm(label:  "Email", formControlName: "",maxLines: 1,)
-
+                  CustomTextForm(label: "UserName",controller: controllerName ,maxLines: 1,),
+                  CustomTextForm(label: "Password", controller: controllerPassword,maxLines: 1,),
+               CustomTextForm(label:  "Email", controller: controllerEmail,maxLines: 1,),
+              //    customElevatedButtonWithIcon(title :Txt("Save",color: AppColor.white,bold: FontWeight.normal,),function: (){})
 
 
 

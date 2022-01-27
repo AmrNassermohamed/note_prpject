@@ -6,6 +6,7 @@ import 'package:note_prpject/models/note_model.dart';
 import 'package:note_prpject/models/user_model.dart';
 import 'package:note_prpject/provider/provider_note.dart';
 import 'package:note_prpject/provider/provider_user.dart';
+import 'package:note_prpject/screen/note_screen/index.dart';
 import 'package:note_prpject/shared/global_components/app_bar.dart';
 import 'package:note_prpject/shared/global_components/custom_text_filed.dart';
 
@@ -47,28 +48,36 @@ class EditNoteScreenState extends State<EditNoteScreen> {
  return  SafeArea(
    child: Scaffold(
        appBar: appBar(context,widget.add==true? "Edit Note":"Add Note",true),
-       body:  Container(
-         height: MediaQuery.of(context).size.height,
-         color: AppColor.white,
-         padding: const EdgeInsets.all(10),
-         child: SingleChildScrollView(
-           child: Column(
-               children: [
-                CustomTextForm(label: widget.noteModel.text.toString(),maxLines: 5, controller: controller,),
+       body:  WillPopScope(
+       onWillPop: () async {
+         var data = await
+         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => NoteScreen(),), (route) => false);
+         return data;
+       },
+
+
+    child: Container(
+           height: MediaQuery.of(context).size.height,
+           color: AppColor.white,
+           padding: const EdgeInsets.all(10),
+           child: SingleChildScrollView(
+             child: Column(
+                 children: [
+                  CustomTextForm(label: widget.noteModel.text.toString(),maxLines: 5, controller: controller,),
 SizedBox(height: 10,),
 
-                 Consumer<ProviderUser>(
-                     builder: (context, provider, child) {
-                       if (provider.listUserState.hasData) {
-                         if(provider.listUserState.data!.isNotEmpty) {
-                           return DropDownButton(noteModel: widget.noteModel,add: widget.add,);
+                   Consumer<ProviderUser>(
+                       builder: (context, provider, child) {
+                         if (provider.listUserState.hasData) {
+                           if(provider.listUserState.data!.isNotEmpty) {
+                             return DropDownButton(noteModel: widget.noteModel,add: widget.add,);
+                           }else{
+                             return     Txt("title",bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
+                             FontWeight.w800,color: AppColor.black,);
+                           }
                          }else{
-                           return     Txt("title",bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
-                           FontWeight.w800,color: AppColor.black,);
-                         }
-                       }else{
-                         return Progress();
-                       }})
+                           return Progress();
+                         }})
 
 
 
@@ -76,10 +85,11 @@ SizedBox(height: 10,),
 
 
 
-               ]),
+                 ]),
+           ),
+
+
          ),
-
-
        ),
 
 

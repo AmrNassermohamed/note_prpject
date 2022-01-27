@@ -1,11 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:note_prpject/constants/colors.dart';
 
 Widget customElevatedButtonWithIcon(context,
     {required String title,
       required Function? function,
       bool isUpperCase = true,
       bool showSpacing = true,
-      Color backGroundColor = Colors.blue,
+      Color backGroundColor = Colors.deepPurple,
       Color color = Colors.white,
       double? width,
       double? height,
@@ -25,11 +27,11 @@ Widget customElevatedButtonWithIcon(context,
           children: [
             rightIcon ?? SizedBox.shrink(),
             showSpacing ? Spacer() : SizedBox.shrink(),
-            const Padding(
-              padding: EdgeInsets.all(0),
-              child: Icon(Icons.search),
+            Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(title,textAlign: TextAlign.center,),
             ),
-            showSpacing ? Spacer() : const SizedBox.shrink(),
+            showSpacing ? Spacer() : SizedBox.shrink(),
             leftIcon ?? SizedBox.shrink()
           ],
         ),

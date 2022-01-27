@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_prpject/constants/colors.dart';
+import 'package:note_prpject/screen/add_user/index.dart';
 import 'package:note_prpject/screen/options/index.dart';
 import 'package:note_prpject/shared/global_components/text_global.dart';
 
@@ -18,13 +19,15 @@ appBarHome(BuildContext context,title){
       GestureDetector(
         onTap:(){
           print("////////////////");
+          AppNavigator.navigateTo(context, AddUserScreen());
         //  AppNavigator.navigateTo(context, SearchScreen());
         },
         child:const Padding(padding: EdgeInsets.all(10.0),child:
         Icon(Icons.person_add,color:AppColor.white,)),
       ),
       GestureDetector(
-        onTap:(){
+        onTap:(){     AppNavigator.navigateTo(context, OptionsScreen());
+
           print("////////////////");
           //  AppNavigator.navigateTo(context, SearchScreen());
         },
@@ -33,7 +36,7 @@ appBarHome(BuildContext context,title){
       ),
       GestureDetector(
         onTap:(){
-          AppNavigator.navigateTo(context, OptionsScreen());
+
           //  AppNavigator.navigateTo(context, SearchScreen());
         },
         child:const Padding(padding: EdgeInsets.all(10.0),child:
