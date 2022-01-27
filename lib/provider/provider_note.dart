@@ -7,17 +7,66 @@ class ProviderNote extends ChangeNotifier {
   late ProviderGeneralState<
       List <NoteModel>> listNoteState = ProviderGeneralState(
       waiting: true);
+bool showSearch=false;
+bool showFilter=false;
+late String key="text";
+late List <NoteModel> history;
+restoreData(){
+  listNoteState.data=history;
+  notifyListeners();
+}
 
+  filterList(key,value){
+    print(value);
+    List<NoteModel> chosen = [];
+    switch(key){
+      case "text":
+      listNoteState.data= listNoteState.data!.where((element) =>
+            element.text.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+         notifyListeners();
+        break;
+      case "name":
+        listNoteState.data!.where((element) => element.userId==value).toList();
+        break;
+    }
+    notifyListeners();
+
+  }
+
+List <String> listFilter=["text","user"];
   getAllNoteApi() async {
     List <NoteModel> getNote = [];
     getNote = await NoteData().getAllNotes();
     print("////////////");
     print(getNote);
+    history=getNote;
     listNoteState =
         ProviderGeneralState(data: getNote, hasData: true);
 notifyListeners();
   }
 
+showingSearch(){
+    if(showSearch==false){
+      showSearch=true;
+      notifyListeners();
+    }else{
+      showSearch=false;
+      notifyListeners();
+    }
+
+}
+
+showingFilter(){
+
+  if(showFilter==false){
+    showFilter=true;
+    notifyListeners();
+  }else{
+    showFilter=false;
+    notifyListeners();
+  }
+}
 
 
   getAllNoteLocalDatabase() async {
@@ -25,6 +74,7 @@ notifyListeners();
     getNote = await NoteData().getAllNotesLocalDateBase();
     print("////////////");
     print(getNote);
+    history=getNote;
     listNoteState =
         ProviderGeneralState(data: getNote, hasData: true);
     notifyListeners();

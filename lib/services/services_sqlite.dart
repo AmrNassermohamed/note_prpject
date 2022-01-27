@@ -67,7 +67,7 @@ class SQLiteDbProvider {
     var result = await db.rawInsert(
         "INSERT Into Note (id, text, placeDateTime, userId)"
             " VALUES (?, ?, ?, ?)",
-        [id, noteModel.id, noteModel.text, noteModel.placeDateTime,noteModel.userId]
+        [id, noteModel.text, noteModel.placeDateTime,noteModel.userId]
     );
     print(result);
     return result;

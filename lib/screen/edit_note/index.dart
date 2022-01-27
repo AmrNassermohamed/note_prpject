@@ -12,7 +12,7 @@ import 'package:note_prpject/shared/global_components/custom_text_filed.dart';
 import 'package:note_prpject/shared/global_components/progress.dart';
 import 'package:note_prpject/shared/global_components/text_global.dart';
 import 'package:provider/provider.dart';
-final TextEditingController controller = TextEditingController(text: "Your initial value");
+final TextEditingController controller = TextEditingController();
 class EditNoteScreen extends StatefulWidget {
   static const route = "EditNoteScreen";
   NoteModel noteModel;

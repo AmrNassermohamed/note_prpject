@@ -43,6 +43,8 @@ class ServicesHandler {
           if(statusCode==true) {
             return 200;
           }else{
+            print(json.decode(response.body.toString()));
+            print(response.body);
             return json.decode(utf8.decode(response.bodyBytes));
           }
 

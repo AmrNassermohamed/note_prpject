@@ -6,6 +6,7 @@ import 'package:note_prpject/models/note_model.dart';
 import 'package:note_prpject/provider/provider_note.dart';
 import 'package:note_prpject/screen/edit_note/index.dart';
 import 'package:note_prpject/shared/global_components/app_bar.dart';
+import 'package:note_prpject/shared/global_components/custom_text_filed.dart';
 import 'package:note_prpject/shared/global_components/progress.dart';
 import 'package:note_prpject/shared/global_components/text_global.dart';
 import 'package:note_prpject/provider/provider_user.dart';
@@ -27,11 +28,12 @@ class NoteScreenState extends State< NoteScreen> {
   super.initState();
 
   }
-
+final TextEditingController controller = TextEditingController();
   init() async {
     final validationServiceNote = Provider.of<ProviderNote>(context,listen: false);
     final validationServiceUser = Provider.of<ProviderUser>(context,listen: false);
     validationServiceUser.apiOrNot=KeyWords.apiOrNot;
+    await  validationServiceUser.getAllUser();
     if(KeyWords.apiOrNot==true) {
       await validationServiceNote.getAllNoteApi();
     }else{
@@ -42,7 +44,8 @@ class NoteScreenState extends State< NoteScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-        return SafeArea(
+    final validationServiceNote = Provider.of<ProviderNote>(context,listen: false);
+    return SafeArea(
         child: Scaffold(
           appBar: appBarHome(context, ""),
             body:  Container(
@@ -54,18 +57,47 @@ class NoteScreenState extends State< NoteScreen> {
                     children: [
               Row(children: [
                 InkWell(onTap: (){
-
+validationServiceNote.showingFilter();
 
                 }, child:Icon(Icons.menu,color: AppColor.blue)),
 SizedBox(width: 10),
                 InkWell(onTap: (){
-
+if(validationServiceNote.showSearch==false){
+  validationServiceNote.showingSearch();
+}else{
+print("ffpkfek");
+validationServiceNote.filterList("text", controller.text);
+}
 
                 }, child:Icon(Icons.search,color: AppColor.blue,)),
-
+    Consumer<ProviderNote>(
+    builder: (context, provider, child) {
+    if(provider.showSearch==true) {
+      return Flexible(
+          child: CustomTextFormSearch(
+            controller: controller, maxLines: 1, label: 'search',)
+      );
+    }else{
+      return SizedBox();
+    }
+    })
 
               ],),
+    Consumer<ProviderNote>(
+    builder: (context, provider, child) {
+      if(provider.showFilter==true) {
+        return Row(children: [
+          Column(children: [
+        for(int i=0;i<validationServiceNote.listFilter.length;i++)
+          Txt(validationServiceNote.listFilter[i])
+          ],)
 
+
+        ],);
+      }else{
+        return SizedBox();
+      }
+    }),
                       Consumer<ProviderNote>(
                           builder: (context, provider, child) {
                             if (provider.listNoteState.hasData) {
@@ -94,7 +126,9 @@ SizedBox(width: 10),
                 elevation: 0.0,
                 child: new Icon(Icons.add,color: Colors.white,),
                 backgroundColor: AppColor.blue,
-                onPressed: (){}
+                onPressed: (){
+                  AppNavigator.navigateTo(context, EditNoteScreen(noteModel: NoteModel(userId: '', id: '', placeDateTime: '', text: 'ENTER YOUR NOTE'),add: true,));
+                }
             )
         ),
 
