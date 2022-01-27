@@ -27,7 +27,7 @@ restoreData(){
          notifyListeners();
         break;
       case "name":
-        listNoteState.data!.where((element) => element.userId==value).toList();
+    listNoteState.data =  listNoteState.data!.where((element) => element.userId==value).toList();
         break;
     }
     notifyListeners();

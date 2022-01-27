@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:note_prpject/constants/colors.dart';
 import 'package:note_prpject/constants/key_words.dart';
 import 'package:note_prpject/models/note_model.dart';
+import 'package:note_prpject/models/user_model.dart';
 import 'package:note_prpject/provider/provider_note.dart';
 import 'package:note_prpject/screen/edit_note/index.dart';
 import 'package:note_prpject/shared/global_components/app_bar.dart';
@@ -57,8 +58,11 @@ final TextEditingController controller = TextEditingController();
                     children: [
               Row(children: [
                 InkWell(onTap: (){
-validationServiceNote.showingFilter();
 
+validationServiceNote.showingFilter();
+if(validationServiceNote.showFilter==true){
+  validationServiceNote.restoreData();
+}
                 }, child:Icon(Icons.menu,color: AppColor.blue)),
 SizedBox(width: 10),
                 InkWell(onTap: (){
@@ -70,7 +74,7 @@ validationServiceNote.filterList("text", controller.text);
 }
 
                 }, child:Icon(Icons.search,color: AppColor.blue,)),
-    Consumer<ProviderNote>(
+   Consumer<ProviderNote>(
     builder: (context, provider, child) {
     if(provider.showSearch==true) {
       return Flexible(
@@ -83,22 +87,30 @@ validationServiceNote.filterList("text", controller.text);
     })
 
               ],),
+
+
+
     Consumer<ProviderNote>(
     builder: (context, provider, child) {
-      if(provider.showFilter==true) {
-        return Row(children: [
-          Column(children: [
-        for(int i=0;i<validationServiceNote.listFilter.length;i++)
-          Txt(validationServiceNote.listFilter[i])
-          ],)
-
-
-        ],);
-      }else{
-        return SizedBox();
-      }
+     if(provider.showFilter==true){
+    return   Consumer<ProviderUser>(
+           builder: (context, provider, child) {
+             if (provider.listUserState.hasData) {
+               if(provider.listUserState.data!.isNotEmpty) {
+                 return SubViewUser();
+               }else{
+                 return     Txt("title",bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
+                 FontWeight.w800,color: AppColor.black,);
+               }
+             }else{
+               return Progress();
+             }});
+     } else{
+       return SizedBox();
+     }
     }),
-                      Consumer<ProviderNote>(
+
+                     Consumer<ProviderNote>(
                           builder: (context, provider, child) {
                             if (provider.listNoteState.hasData) {
                               if(provider.listNoteState.data!.isNotEmpty) {
@@ -137,10 +149,10 @@ validationServiceNote.filterList("text", controller.text);
 
 }
 
-class Item extends StatelessWidget {
+class ItemNote extends StatelessWidget {
   NoteModel noteModel;
 
-  Item({Key? key, required this.noteModel}) : super(key: key);
+  ItemNote({Key? key, required this.noteModel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -165,6 +177,42 @@ AppNavigator.navigateTo(context, EditNoteScreen(noteModel: noteModel,add: false,
 
 
 }
+
+class ItemUser extends StatelessWidget {
+  UserModel userModel;
+  ItemUser({Key? key, required this.userModel}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    final validationServiceNote = Provider.of<ProviderNote>(context,listen: false);
+    return InkWell(
+      onTap: (){
+        validationServiceNote.restoreData();
+        validationServiceNote.filterList("name", userModel.id);
+
+
+      },
+      child: Container(
+        child: Column(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+            Expanded(child:  Txt(userModel.userName,bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
+            FontWeight.w800,color: AppColor.black,)),
+
+
+
+          ],),
+          Divider(color: AppColor.grey,thickness: 1,),
+        ],),
+      ),
+    );
+  }
+
+
+
+
+}
+
 class SubView extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -175,7 +223,25 @@ class SubView extends StatelessWidget{
         shrinkWrap: true,
         itemCount: validationService.listNoteState.data!.length,
         itemBuilder: (BuildContext context,int index){
-          return Item(noteModel:validationService.listNoteState.data![index]);
+          return ItemNote(noteModel:validationService.listNoteState.data![index]);
+        }
+    );
+  }
+
+
+}
+
+class SubViewUser extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    final validationService = Provider.of<ProviderUser>(context,listen: false);
+    return  ListView.builder(
+
+        shrinkWrap: true,
+        itemCount: validationService.listUserState.data!.length,
+        itemBuilder: (BuildContext context,int index){
+          return ItemUser(userModel:validationService.listUserState.data![index]);
         }
     );
   }
