@@ -55,7 +55,7 @@ appBar(BuildContext context,title,bool actions){
      Container(
        child: Row(children: [
 
-         const Icon(Icons.arrow_back,color: AppColor.white,),
+
          SizedBox(width: 10,),
          Txt(title,bold: FontWeight.bold,textAlign: TextAlign.left,size: 15.0,weight:
          FontWeight.w800,color: Colors.white,),

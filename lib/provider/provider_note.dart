@@ -40,7 +40,7 @@ try {
 
 addNoteApi(NoteModel noteModel) async {
   try {
-    await NoteData().updateNote(noteModel);
+    await NoteData().insertNote(noteModel);
   }catch(ex){
     rethrow;
   }

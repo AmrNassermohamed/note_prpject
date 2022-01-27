@@ -1,28 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:note_prpject/constants/colors.dart';
+import 'package:note_prpject/constants/key_words.dart';
 import 'package:note_prpject/models/note_model.dart';
 import 'package:note_prpject/models/user_model.dart';
 import 'package:note_prpject/provider/provider_note.dart';
 import 'package:note_prpject/provider/provider_user.dart';
 import 'package:note_prpject/shared/global_components/app_bar.dart';
-import 'package:note_prpject/shared/global_components/custom_text-filed.dart';
+import 'package:note_prpject/shared/global_components/custom_text_filed.dart';
+
 import 'package:note_prpject/shared/global_components/progress.dart';
 import 'package:note_prpject/shared/global_components/text_global.dart';
 import 'package:provider/provider.dart';
+final TextEditingController controller = TextEditingController(text: "Your initial value");
 class EditNoteScreen extends StatefulWidget {
-  static const route = "CartScreen";
+  static const route = "EditNoteScreen";
   NoteModel noteModel;
-  EditNoteScreen({required this.noteModel,});
+  bool add;
+
+  EditNoteScreen({required this.noteModel,required this.add});
   @override
   EditNoteScreenState createState() => EditNoteScreenState();
 }
 
 class EditNoteScreenState extends State<EditNoteScreen> {
- @override
+
+
+  @override
   void initState() {
     // TODO: implement initState
    init();
+
+
     super.initState();
   }
 
@@ -35,10 +44,9 @@ class EditNoteScreenState extends State<EditNoteScreen> {
   Widget build(BuildContext context) {
     // TODO: implement build
 
-
  return  SafeArea(
    child: Scaffold(
-       appBar: appBar(context, "Edit Note",true),
+       appBar: appBar(context,widget.add==true? "Edit Note":"Add Note",true),
        body:  Container(
          height: MediaQuery.of(context).size.height,
          color: AppColor.white,
@@ -46,14 +54,14 @@ class EditNoteScreenState extends State<EditNoteScreen> {
          child: SingleChildScrollView(
            child: Column(
                children: [
-                CustomTextForm(label: "text", formControlName:"",maxLines: 5,),
+                CustomTextForm(label: widget.noteModel.text.toString(),maxLines: 5, controller: controller,),
 SizedBox(height: 10,),
 
                  Consumer<ProviderUser>(
                      builder: (context, provider, child) {
                        if (provider.listUserState.hasData) {
                          if(provider.listUserState.data!.isNotEmpty) {
-                           return DropDownButton(noteModel: widget.noteModel,);
+                           return DropDownButton(noteModel: widget.noteModel,add: widget.add,);
                          }else{
                            return     Txt("title",bold: FontWeight.bold,textAlign: TextAlign.left,size: 10.0,weight:
                            FontWeight.w800,color: AppColor.black,);
@@ -83,7 +91,8 @@ SizedBox(height: 10,),
 }
 class DropDownButton extends StatelessWidget {
 NoteModel noteModel;
- DropDownButton({required this.noteModel});
+bool add;
+ DropDownButton({required this.noteModel,required this.add});
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -105,8 +114,34 @@ NoteModel noteModel;
             ))
                 .toList(),
             onChanged: (s ) {
-validationServiceNote.updateNoteApi(NoteModel(id: noteModel.id, text: "text", placeDateTime: DateTime.now().toString(), userId:s!.id.toString() ));
-            },
+              if(add==true) {
+                if (KeyWords.apiOrNot == true) {
+                  validationServiceNote.addNoteApi(NoteModel(id: noteModel.id,
+                      text: controller.text,
+                      placeDateTime: DateTime.now().toString(),
+                      userId: s!.id.toString()));
+                } else {
+                  validationServiceNote.addNoteLocalDateBase(
+                      NoteModel(id: noteModel.id,
+                          text: controller.text,
+                          placeDateTime: DateTime.now().toString(),
+                          userId: s!.id.toString()));
+                }
+              }
+               else{
+    if(KeyWords.apiOrNot==true) {
+    validationServiceNote.updateNoteApi(NoteModel(id: noteModel.id,
+    text: controller.text,
+    placeDateTime: DateTime.now().toString(),
+    userId: s!.id.toString()));
+    }else{
+    validationServiceNote.updateNoteLocalDateBase(NoteModel(id: noteModel.id,
+    text: controller.text,
+    placeDateTime: DateTime.now().toString(),
+    userId: s!.id.toString()));
+              }
+              }
+},
             isExpanded: false,
             value: validationServiceUser.listUserState.data!.first,
           ),

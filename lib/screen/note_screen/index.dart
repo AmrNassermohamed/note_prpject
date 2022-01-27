@@ -12,7 +12,7 @@ import 'package:note_prpject/provider/provider_user.dart';
 import 'package:note_prpject/shared/navgaitor.dart';
 import 'package:provider/provider.dart';
 class NoteScreen extends StatefulWidget {
-  static const route = "CartScreen";
+  static const route = "NoteScreen";
   @override
   NoteScreenState createState() => NoteScreenState();
 }
@@ -117,7 +117,7 @@ Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
   FontWeight.w800,color: AppColor.black,)),
   IconButton(onPressed: (){
 
-AppNavigator.navigateTo(context, EditNoteScreen(noteModel: noteModel,));
+AppNavigator.navigateTo(context, EditNoteScreen(noteModel: noteModel,add: false,));
   }, icon:Icon(Icons.edit,color: AppColor.grey,)),
 
 

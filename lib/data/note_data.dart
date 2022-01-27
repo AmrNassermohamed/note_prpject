@@ -40,10 +40,10 @@ class NoteData {
             "Id": noteModel.id,
             "Text":noteModel.text,
             "UserId": noteModel.userId,
-            "PlaceDateTime": DateTime.parse(noteModel.placeDateTime)
+
 
           }),
-          returnBody: true).then((value) => value);
+          returnBody:false).then((value) => value);
       return response;
     } catch (ex) {
       rethrow;
@@ -57,11 +57,11 @@ class NoteData {
       var response = await ServicesHandler().
       postService(
           urlSuffix: "notes/insert",
-          requestBody: {
+          requestBody:  jsonEncode({
             "Text":noteModel.text,
             "UserId": noteModel.userId,
-            "PlaceDateTime": noteModel.placeDateTime
-          },
+
+          }),
           returnBody: true).then((value) => value);
       return response;
     } catch (ex) {
